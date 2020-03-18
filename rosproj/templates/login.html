@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ROS Login</title>
+    <link rel="stylesheet" type="text/css" href='../static/login.css'>
+</head>
+<body>
+<div class="body"></div>
+		<div class="grad"></div>
+		<div class="header">
+			<div>Ros<span>L2tp</span></div>
+		</div>
+		<br>
+		<div class="login">
+				<input id ='user' type="text" placeholder="username" name="user"><br>
+				<input id ='passwd' type="password" placeholder="password" name="password"><br>
+				<input id= 'submit' type="button" value="Login">
+		</div>
+<script src='../static/js/jquery-1.11.3.min.js'></script>
+<script>
+    $('#submit').click(function () {
+        var user = $('#user').val();
+        var passwd = $('#passwd').val();
+        if(user.length === 0){
+            alert('用户名不能为空!');
+            return false
+        }
+        else if(passwd.length === 0){
+            alert('密码不能为空!');
+            return false
+        }
+        else {
+            $.ajax({
+                url:'login',
+                type:'post',
+                data:{'username':user,'password':passwd,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success:function (data) {
+                    var check = JSON.parse(data);
+                    if (check.info === 'ok'){
+                        window.location.href = 'device';
+                    }
+                    else {
+                        alert(check.info)
+                    }
+
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

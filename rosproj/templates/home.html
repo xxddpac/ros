@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href='../static/home.css'>
+</head>
+<body>
+<div class="container">
+  <h2>MikroTik ROS Router</h2>
+  <h1>Automation add L2TP Username and Password</h1>
+
+  <div class= 'content' >
+    <div class="fields">
+      <span>
+       <input id = 'user' placeholder="L2TP Username" type="text" />
+    </span>
+    <br />
+     <span>
+       <input id = 'passwd' placeholder="L2TP Password" type="password" />
+    </span>
+    </div>
+    <div class="submit">
+      <input id = 'submit' class="submit" value="Submit" type="button" />
+    </div>
+  </div>
+</div>
+<script src='../static/js/jquery-1.11.3.min.js'></script>
+<script>
+    $('#submit').click(function () {
+        var user = $('#user').val();
+        var passwd = $('#passwd').val();
+        if(user.length === 0){
+            alert('L2TP用户名不能为空!');
+            return false
+        }
+        else if(passwd.length === 0){
+            alert('L2TP密码不能为空!');
+            return false
+        }
+        else {
+            $.ajax({
+                url:'home',
+                type:'post',
+                data:{'username':user,'password':passwd,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success:function (data) {
+                    var check = JSON.parse(data);
+                    if (check.status === 1){
+                        alert(check.result);
+                        window.location.href = 'home';
+                    }
+                    else {
+                        alert(check.result)
+                    }
+
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>
